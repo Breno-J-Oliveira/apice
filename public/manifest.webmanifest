@@ -1,0 +1,24 @@
+{
+  "name": "Ápice — Sistema operacional de estudos",
+  "short_name": "Ápice",
+  "description": "O seu sistema operacional pessoal de estudos",
+  "theme_color": "#F2EBE1",
+  "background_color": "#F2EBE1",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

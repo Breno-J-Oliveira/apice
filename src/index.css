@@ -1,0 +1,315 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────
+   Ápice — Sistema de temas
+   Cinco paletas, alternáveis em runtime.
+   Cores baseiam-se em HSL para equilíbrio perceptual.
+   ───────────────────────────────────────────── */
+
+/* ─── Tema: Areia (padrão, claro quente) ─── */
+:root,
+[data-theme='areia'] {
+  --color-bg: #F2EBE1;
+  --color-bg-card: #FDF9F5;
+  --color-bg-hover: #EDE4D6;
+  --color-bg-elevated: #FFFFFF;
+  --color-text-primary: #2E2A26;
+  --color-text-secondary: #6B635B;
+  --color-text-muted: #9E958C;
+  --color-accent: #C47A5A;
+  --color-accent-hover: #B0694C;
+  --color-accent-soft: #F0DDD2;
+  --color-success: #7A9B6E;
+  --color-warning: #D4A853;
+  --color-danger: #C4665A;
+  --color-border: #E0D8CE;
+  --color-border-light: #EFE9E0;
+  --color-glow: rgba(196, 122, 90, 0.15);
+  color-scheme: light;
+}
+
+/* ─── Tema: Bruma (claro frio) ─── */
+[data-theme='bruma'] {
+  --color-bg: #E7EBEF;
+  --color-bg-card: #F3F6F8;
+  --color-bg-hover: #DEE4E9;
+  --color-bg-elevated: #FFFFFF;
+  --color-text-primary: #25282C;
+  --color-text-secondary: #5E6670;
+  --color-text-muted: #8E96A0;
+  --color-accent: #6B8CA8;
+  --color-accent-hover: #5A7A96;
+  --color-accent-soft: #DCE6F0;
+  --color-success: #7A9B8C;
+  --color-warning: #B5A060;
+  --color-danger: #B07A7A;
+  --color-border: #D0D7DD;
+  --color-border-light: #E4E9EE;
+  --color-glow: rgba(107, 140, 168, 0.15);
+  color-scheme: light;
+}
+
+/* ─── Tema: Musgo (escuro quente) ─── */
+[data-theme='musgo'] {
+  --color-bg: #1E211D;
+  --color-bg-card: #262925;
+  --color-bg-hover: #2D302C;
+  --color-bg-elevated: #2E312D;
+  --color-text-primary: #EDE7DB;
+  --color-text-secondary: #B5B0A5;
+  --color-text-muted: #7A766D;
+  --color-accent: #8FA876;
+  --color-accent-hover: #A0BA86;
+  --color-accent-soft: #2A3328;
+  --color-success: #8FAB7A;
+  --color-warning: #C4A55A;
+  --color-danger: #B06A5A;
+  --color-border: #363934;
+  --color-border-light: #2D302A;
+  --color-glow: rgba(143, 168, 118, 0.18);
+  color-scheme: dark;
+}
+
+/* ─── Tema: Ardósia (escuro frio, alto contraste) ─── */
+[data-theme='ardosia'] {
+  --color-bg: #1A1C22;
+  --color-bg-card: #22242B;
+  --color-bg-hover: #292B33;
+  --color-bg-elevated: #2A2C34;
+  --color-text-primary: #E8E6E3;
+  --color-text-secondary: #A8A6A1;
+  --color-text-muted: #706E6A;
+  --color-accent: #5DA3C2;
+  --color-accent-hover: #6DB3D2;
+  --color-accent-soft: #1E2E34;
+  --color-success: #6BAE8A;
+  --color-warning: #C4A55A;
+  --color-danger: #C4868E;
+  --color-border: #32343C;
+  --color-border-light: #282A30;
+  --color-glow: rgba(93, 163, 194, 0.18);
+  color-scheme: dark;
+}
+
+/* ─── Tema: Aurora (gradiente suave) ─── */
+[data-theme='aurora'] {
+  --color-bg: linear-gradient(135deg, #F2EBE1 0%, #E7EBEF 100%);
+  --color-bg-card: rgba(253, 249, 245, 0.85);
+  --color-bg-hover: rgba(237, 228, 214, 0.6);
+  --color-bg-elevated: rgba(255, 255, 255, 0.95);
+  --color-text-primary: #2E2A26;
+  --color-text-secondary: #5E5A55;
+  --color-text-muted: #9E958C;
+  --color-accent: #B07AA8;
+  --color-accent-hover: #9E6A98;
+  --color-accent-soft: rgba(176, 122, 168, 0.15);
+  --color-success: #7A9B6E;
+  --color-warning: #D4A853;
+  --color-danger: #C4665A;
+  --color-border: rgba(224, 216, 206, 0.7);
+  --color-border-light: rgba(239, 233, 224, 0.5);
+  --color-glow: rgba(176, 122, 168, 0.2);
+  color-scheme: light;
+}
+
+/* ─── Base styles ─── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  min-height: 100vh;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* O tema Aurora usa gradiente — sobrescreve o background */
+[data-theme='aurora'] body {
+  background: var(--color-bg);
+  background-attachment: fixed;
+}
+
+/* ─── Tipografia ─── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Lora', Georgia, 'Times New Roman', serif;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  color: var(--color-text-primary);
+}
+
+h1 { font-size: clamp(1.75rem, 4vw, 2.25rem); }
+h2 { font-size: clamp(1.4rem, 3vw, 1.75rem); }
+h3 { font-size: 1.2rem; }
+h4 { font-size: 1.05rem; }
+
+p {
+  color: var(--color-text-secondary);
+}
+
+/* ─── Scrollbar customizada ─── */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+  border: 2px solid var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+/* ─── Focus visível (acessibilidade) ─── */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ─── Acessibilidade: prefers-reduced-motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Seleção de texto ─── */
+::selection {
+  background-color: var(--color-accent-soft);
+  color: var(--color-text-primary);
+}
+
+/* ─── Componentes utilitários ─── */
+@layer components {
+  .page-container {
+    @apply max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8;
+  }
+
+  .page-header {
+    @apply mb-6 sm:mb-8;
+  }
+
+  .page-title {
+    @apply font-serif text-2xl sm:text-3xl font-semibold text-text-primary tracking-tight;
+  }
+
+  .page-subtitle {
+    @apply text-text-secondary mt-1 text-sm;
+  }
+
+  .card {
+    @apply bg-bg-card rounded-2xl border border-border-light shadow-card p-5 sm:p-6;
+    backdrop-filter: blur(8px);
+  }
+
+  [data-theme='aurora'] .card {
+    backdrop-filter: blur(12px);
+    background: var(--color-bg-card);
+  }
+
+  .card-hover {
+    @apply card transition-all duration-250 ease-expo-out hover:shadow-card-hover hover:border-border;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 select-none;
+  }
+
+  .btn-primary {
+    @apply btn bg-accent text-white hover:bg-accent-hover active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply btn text-text-secondary hover:bg-bg-hover hover:text-text-primary;
+  }
+
+  .btn-outline {
+    @apply btn border border-border bg-bg-card text-text-secondary hover:bg-bg-hover;
+  }
+
+  .input {
+    @apply w-full px-3 py-2.5 rounded-xl border border-border bg-bg text-sm text-text-primary placeholder:text-text-muted outline-none transition-all;
+  }
+  .input:focus,
+  .input:focus-visible {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(196, 122, 90, 0.15);
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-xs font-medium;
+  }
+}
+
+/* ─── Animações customizadas ─── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, var(--color-bg-hover) 0%, var(--color-border-light) 50%, var(--color-bg-hover) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 var(--color-glow); }
+  50% { box-shadow: 0 0 0 8px transparent; }
+}
+
+.pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* ─── Toasts (sonner overrides) ─── */
+[data-sonner-toaster] {
+  font-family: 'Inter', system-ui, sans-serif !important;
+}
+
+[data-sonner-toast] {
+  background: var(--color-bg-card) !important;
+  color: var(--color-text-primary) !important;
+  border: 1px solid var(--color-border-light) !important;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08) !important;
+  border-radius: 12px !important;
+  font-size: 14px !important;
+}

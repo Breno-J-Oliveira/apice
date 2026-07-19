@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Ápice: montanha/pico com sol por trás -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F2EBE1" />
+      <stop offset="100%" stop-color="#E0D8CE" />
+    </linearGradient>
+    <linearGradient id="peak" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#C47A5A" />
+      <stop offset="100%" stop-color="#A85D40" />
+    </linearGradient>
+    <linearGradient id="peakShadow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9E4F37" />
+      <stop offset="100%" stop-color="#7A3D2A" />
+    </linearGradient>
+  </defs>
+
+  <!-- Fundo arredondado -->
+  <rect width="64" height="64" rx="14" fill="url(#bg)" />
+
+  <!-- Sol -->
+  <circle cx="32" cy="34" r="11" fill="#E8B870" opacity="0.55" />
+  <circle cx="32" cy="34" r="7" fill="#D4A853" opacity="0.7" />
+
+  <!-- Montanha da frente (escura) -->
+  <path d="M8 52 L26 22 L36 36 L44 26 L56 52 Z" fill="url(#peakShadow)" />
+
+  <!-- Pico principal (frente) -->
+  <path d="M14 52 L32 18 L50 52 Z" fill="url(#peak)" />
+
+  <!-- Linha de neve no topo -->
+  <path d="M27 27 L32 20 L37 27 L34 27 L32 24 L30 27 Z" fill="#FDF9F5" opacity="0.85" />
+
+  <!-- Base -->
+  <rect x="0" y="50" width="64" height="14" fill="#E0D8CE" />
+</svg>
