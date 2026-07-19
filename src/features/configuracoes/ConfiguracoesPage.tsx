@@ -10,13 +10,13 @@ import { NOMES_TEMAS } from '@shared/types';
 import { cn, formatarData, hojeISO, formatarMinutos } from '@shared/lib/utils';
 import { PageHeader } from '@shared/components/PageHeader';
 import { ConfirmDialog, useConfirm } from '@shared/components/ConfirmDialog';
-import { Download, Upload, Save, Trash2, Moon, Sun, Palette, AlertTriangle, FileDown, Monitor, Sparkles, Database, Info, Trash } from 'lucide-react';
+import { Download, Upload, Save, Trash2, Moon, Sun, Palette, AlertTriangle, FileDown, Monitor, Sparkles, Database, Info, Trash, Mountain } from 'lucide-react';
 import { toast } from 'sonner';
 import { db as database } from '@core/db/database';
 
 export default function ConfiguracoesPage() {
   const { perfilAtivo, atualizarPerfil, atualizarTema, alternarTemaSistema, removerPerfil } = usePerfilStore();
-  const { materias, subtopicos, importarDiagnostico } = useMateriasStore();
+  const { materias, subtopicos, importarDiagnostico, aplicarPlanoBreno } = useMateriasStore();
   const { sessoes, historicoSemanal, anotacoes, redacoes, simulados, planejamento, conquistas, flashcards } = useSessoesStore();
   const fileRef = useRef<HTMLInputElement>(null);
   const { pedirConfirmacao, dialog } = useConfirm();
@@ -109,6 +109,23 @@ export default function ConfiguracoesPage() {
     } finally {
       if (fileRef.current) fileRef.current.value = '';
     }
+  };
+
+  const handleAplicarPlanoBreno = async () => {
+    if (!perfilAtivo) return;
+    pedirConfirmacao({
+      titulo: 'Aplicar plano Breno?',
+      descricao: 'As matérias padrão (Inglês, Literatura, Redação) serão arquivadas. Serão criadas 9 matérias com pesos e metas corretos (distribuição 18h/semana), e os subtopicos do diagnóstico serão importados.',
+      textoConfirmar: 'Sim, aplicar',
+      onConfirmar: async () => {
+        try {
+          const resultado = await aplicarPlanoBreno(perfilAtivo.id);
+          toast.success(`Plano Breno aplicado! ${resultado.subtopicos} subtopicos importados.`);
+        } catch {
+          toast.error('Erro ao aplicar plano');
+        }
+      },
+    });
   };
 
   const handleImportarDiagnostico = async () => {
@@ -330,6 +347,38 @@ export default function ConfiguracoesPage() {
             />
           </label>
         </div>
+      </motion.div>
+
+      {/* Plano Breno */}
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="card mb-4">
+        <div className="flex items-center gap-2 mb-3">
+          <Mountain size={18} className="text-accent" />
+          <h3 className="font-serif text-lg font-semibold">Plano Breno (18h/semana)</h3>
+        </div>
+        <p className="text-sm text-text-secondary mb-3">
+          Aplica um plano de estudos pré-configurado: 9 matérias (Matemática, Química, Biologia, Física, Português, História, Geografia, Filosofia, Sociologia) com pesos, metas semanais e subtopicos do teu diagnóstico.
+        </p>
+        <div className="grid grid-cols-3 sm:grid-cols-9 gap-1 mb-3 text-xs text-center">
+          {[
+            { n: 'Mat', h: '6h' },
+            { n: 'Quí', h: '2h40' },
+            { n: 'Bio', h: '2h20' },
+            { n: 'Fís', h: '2h' },
+            { n: 'Port', h: '1h30' },
+            { n: 'His', h: '1h15' },
+            { n: 'Geo', h: '1h15' },
+            { n: 'Fil', h: '30' },
+            { n: 'Soc', h: '30' },
+          ].map(m => (
+            <div key={m.n} className="p-1.5 rounded-md bg-bg-hover/50">
+              <div className="font-semibold text-text-primary">{m.n}</div>
+              <div className="text-text-muted">{m.h}</div>
+            </div>
+          ))}
+        </div>
+        <button onClick={handleAplicarPlanoBreno} className="btn-primary">
+          <Mountain size={16} /> Aplicar plano Breno
+        </button>
       </motion.div>
 
       {/* Diagnóstico */}
