@@ -36,7 +36,11 @@ O **Apice** e o seu sistema operacional pessoal de estudos — uma plataforma PW
 - **Multi-perfil** — varios utilizadores no mesmo dispositivo, dados isolados
 - **5 temas visuais** (Areia, Bruma, Musgo, Ardósia, Aurora) + tema do sistema operativo
 - **Sessao rapida** (atalho `S`) — regista estudo offline em segundos
-- **Timer Pomodoro** com sons, atalhos de teclado e tempo real decorrido
+- **Timer Pomodoro robusto** — baseado em timestamps reais (não zera se saíres da aba, minimizar ou mudar de aba do browser)
+- **Tempo ao vivo no titulo do site** — o `document.title` mostra `⏱ 24:35 · Matematica — Apice` enquanto estudas
+- **Subgeneros da materia na pagina de estudo** — vês todos os subtopicos logo abaixo da materia selecionada, sem ter que sair
+- **Botao +5 / +15 / +30 min** — adiciona tempo ao timer atual sem resetar (e atalho `Ctrl + +`)
+- **Filtro de materias** (Ativas / Pendentes / Concluidas / Todas) — todas as materias visiveis, incluindo arquivadas
 - **Heatmap de consistencia** estilo GitHub (90 dias)
 - **Painel inteligente** com prioridades explicadas ("porquê estudar isto agora")
 - **Planeamento semanal** com blocos por dia, marcar como feito e navegar para o timer
@@ -47,6 +51,7 @@ O **Apice** e o seu sistema operacional pessoal de estudos — uma plataforma PW
 - **Conquistas** (14 badges) com grafico de progresso
 - **Backup/restore** versionado com validacao Zod
 - **PWA instalavel** — funciona offline, icone proprio, splash screen
+- **Plano Breno pre-configurado** (18h/semana) — aplica com 1 clique em Configuracoes
 
 ### Para o auto-conhecimento
 - **Streak** com dias de graca (1-2 por semana) — nao te sentes culpado por falhar um dia
@@ -86,6 +91,19 @@ O **Apice** e o seu sistema operacional pessoal de estudos — uma plataforma PW
 4. Adiciona nota opcional (ex: "cap. 3, exercicios 1-10")
 5. Carrega Registar
 6. Sessao e adicionada ao historico com toast de confirmacao
+```
+
+### Fluxo de Estudo com Timer Robusto
+
+```
+1. Estudante escolhe uma materia (vê todas, mesmo concluidas, com filtro)
+2. Os subtopicos da materia aparecem logo abaixo
+3. Ajusta a duracao (15, 25, 30, 45, 60, 90 min) ou usa a pre-definida
+4. Carrega "Iniciar" (ou barra de espaco) — o timer comeca
+5. O titulo do site mostra o tempo ao vivo: "⏱ 24:35 · Matematica — Apice"
+6. Se precisares de mais tempo: clica +5min / +15min / +30min (ou Ctrl + +)
+7. O timer nao zera se mudares de aba, minimizares ou navegares para outra pagina
+8. Ao terminar, a sessao e registada com duracao real (nao a configurada)
 ```
 
 ### Algoritmo de Priorizacao
@@ -206,8 +224,12 @@ O Apice foi desenhado com foco em **privacidade, dados locais e resiliência**.
 ### Estudar (Timer)
 | Componente | Descricao |
 |------------|-----------|
-| Fila do dia | Materias pendentes ordenadas por prioridade |
+| Filtro de materias | Ativas / Pendentes / Concluidas / Todas |
+| Subtopicos | Lista展开/colapsavel com cores por status |
 | Timer Pomodoro | Configuravel (15-90 min), com sons, pausavel, retomavel |
+| **Timer robusto** | Baseado em timestamps reais — não zera ao sair da aba ou minimizar |
+| **Tempo no titulo** | `document.title` mostra o tempo ao vivo (ex: `⏱ 24:35 · Matematica — Apice`) |
+| **Botao +5/+15/+30** | Adiciona tempo sem resetar (atalho: `Ctrl + +`) |
 | Atalho Espaço | Inicia/pausa o timer |
 | Atalho Esc | Para o timer |
 | Sons | Beep ao iniciar, beep duplo ao concluir (toggle on/off) |
@@ -261,6 +283,7 @@ O Apice foi desenhado com foco em **privacidade, dados locais e resiliência**.
 - 5 temas + tema do sistema
 - Backup/restore (com confirmacao)
 - Importacao de diagnostico (181 subtopicos)
+- **Plano Breno pre-configurado (18h/semana)** — aplica com 1 clique: arquiva Inglês/Literatura/Redação, cria as 9 matérias com pesos corretos e importa subtopicos
 - Atalhos de teclado (visualizacao)
 - Resumo de dados (sessoes, anotacoes, simulados, redacoes, total estudado)
 - Zona de perigo (apagar perfil, apagar tudo)
@@ -276,8 +299,9 @@ O Apice foi desenhado com foco em **privacidade, dados locais e resiliência**.
 | `G` + `R` | Ir para Relatorios |
 | `G` + `S` | Ir para Semana |
 | `G` + `C` | Ir para Configuracoes |
-| `Espaco` | Iniciar/pausar timer |
-| `Esc` | Parar timer |
+| `Espaco` | Iniciar/pausar timer (na pagina de estudo) |
+| `Esc` | Parar timer (na pagina de estudo) |
+| `Ctrl +` `+` | Adicionar 5min ao timer atual |
 
 ---
 
@@ -469,12 +493,91 @@ Os testes unitarios estao em `src/core/engines/__tests__/` e cobrem os calculos 
 | Migracao | Nenhuma | v1→v2 automatica |
 | Vulnerabilidades | 8 (1 critical) | **0** |
 | Build | 312 kB gzip | 314 kB gzip |
+| Timer | Decrementa (zera ao sair) | **Timestamps reais (persiste)** |
+| Titulo do site | Fixo | **Tempo ao vivo (MM:SS · Mat)** |
+| Subtopicos na pagina | Fora (requer saida) | **Dentro da pagina de estudo** |
+| Adicionar tempo | Reset obrigatorio | **+5/+15/+30 min (sem reset)** |
+| Plano Breno | Nao existia | **1 clique (18h/semana)** |
 
 ---
 
 ## Licença
 
 MIT — sinta-se livre para usar, modificar e distribuir.
+
+---
+
+## Como funciona o Timer Robusto (detalhes tecnicos)
+
+O timer Pomodoro do Apice foi desenhado para **nunca zerar** em situacoes inesperadas:
+
+```typescript
+// Em vez de decrementar um contador a cada tick:
+setInterval(() => setTempoRestante(prev => prev - 1), 1000);  // ❌ Zera se perder tick
+
+// Calculamos o tempo restante a partir de timestamps reais:
+const calcularTempoRestante = () => {
+  if (estado !== 'foco') {
+    return duracaoTotalRef.current - tempoAcumuladoRef.current;
+  }
+  const agora = Date.now();
+  const decorrido = (agora - inicioRef.current) / 1000;
+  return duracaoTotalRef.current - (tempoAcumuladoRef.current + decorrido);
+};
+setInterval(calcularTempoRestante, 250);  // ✅ Resistente a qualquer interrupcao
+```
+
+**Beneficios:**
+- Sair da aba do Apice → timer continua
+- Minimizar o browser → timer continua
+- O componente desmontar e remontar (React.StrictMode em dev) → timer continua
+- Adicionar +5min → soma ao total e ao restante, sem resetar
+- O titulo do site (`document.title`) e atualizado a cada 250ms com o tempo restante
+
+---
+
+## Plano Breno (18h/semana)
+
+Pre-configurado em **`src/core/db/seedPlanoBreno.ts`**, aplicavel com 1 clique em Configuracoes:
+
+| Materia | Horas | % |
+|---------|-------|---|
+| ➗ Matematica | 6h | 33% |
+| 🧪 Quimica | 2h40 | 15% |
+| 🧬 Biologia | 2h20 | 13% |
+| ⚡ Fisica | 2h | 11% |
+| 📖 Portugues | 1h30 | 8% |
+| 🌎 Historia | 1h15 | 7% |
+| 🌍 Geografia | 1h15 | 7% |
+| 🏛️ Filosofia | 30min | 3% |
+| 👥 Sociologia | 30min | 3% |
+| **Total** | **18h** | **100%** |
+
+O botao **"Aplicar plano Breno"** em Configuracoes:
+- Arquiva as 12 materias padrao (Ingles, Literatura, Redacao)
+- Cria as 9 materias com pesos e metas corretos
+- Importa automaticamente os 181 subtopicos do diagnostico (com o status correto)
+
+---
+
+## Changelog v2.0
+
+- **Rebranding completo**: Enemzin → Apice
+- **5 temas** + tema do sistema operativo
+- **Heatmap de consistencia** estilo GitHub
+- **Sessao rapida** (atalho global `S`)
+- **Pagina de Conquistas** (14 badges)
+- **Flashcards** com algoritmo SM-2
+- **Atalhos de teclado** globais
+- **Toasts** (sonner) com feedback de cada acao
+- **Timer robusto** baseado em timestamps reais
+- **Tempo ao vivo no titulo do site** (`document.title`)
+- **Subtopicos visiveis na pagina de estudo**
+- **Botao +5/+15/+30 min** para adicionar tempo sem resetar
+- **Filtro de materias** (Ativas/Pendentes/Concluidas/Todas)
+- **Plano Breno pre-configurado** (18h/semana, 1 clique)
+- **0 vulnerabilidades** (jspdf atualizado)
+- **Build**: 314 kB gzip, TypeScript strict, PWA instalavel
 
 ---
 
@@ -497,5 +600,5 @@ MIT — sinta-se livre para usar, modificar e distribuir.
 
 <p align="center">
   <strong>Apice v2.0 — finalizado e pronto para usar.</strong><br>
-  0 vulnerabilidades · 0 erros TypeScript · PWA instalavel
+  0 vulnerabilidades · 0 erros TypeScript · PWA instalavel · Timer robusto + Plano Breno
 </p>
